@@ -3,11 +3,13 @@
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="provide_location_permission">provide location permission</string>
-    <string name="destination">Destination</string>
+    <string name="destination">Destination:</string>
     <string name="location_permission_granted">Location permission granted.</string>
     <string name="location_permission_denied">Location permission denied.</string>
     <string name="location_permission_alert_title">Permission required!</string>
     <string name="location_permission_alert_message">In order to use this functionality, application needs location permissions</string>
-    <string name="ok">ok</string>
+    <string name="ok">OK</string>
     <string name="set_destination">set destination</string>
+    <string name="cancel">Cancel</string>
+    <string name="current_location">Current location:</string>
 </resources>

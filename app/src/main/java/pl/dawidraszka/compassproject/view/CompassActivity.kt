@@ -16,12 +16,13 @@ import kotlinx.android.synthetic.main.activity_compass.*
 
 import pl.dawidraszka.compassproject.R
 import pl.dawidraszka.compassproject.model.Direction
+import pl.dawidraszka.compassproject.model.SimplePosition
 import pl.dawidraszka.compassproject.presenter.CompassPresenter
 
 const val PERMISSION_REQUEST_LOCATION = 0
 
 class CompassActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback,
-    CompassView {
+    CompassView, PositionDialogFragment.PositionDialogListener {
 
     private lateinit var presenter: CompassPresenter
 
@@ -37,6 +38,8 @@ class CompassActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
         ) removeLocationPermissionButton() else {
             provide_location_permission.setOnClickListener { requestLocationPermission() }
         }
+
+        set_destination_button.setOnClickListener { PositionDialogFragment().show(supportFragmentManager, "PositionDialogFragment") }
     }
 
     override fun onRequestPermissionsResult(
@@ -110,5 +113,10 @@ class CompassActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
 
     override fun updateDirection(direction: Direction) {
         direction_tv.text = direction.toString()
+    }
+
+    override fun onDialogPositiveClick(destination: SimplePosition) {
+        destination_latitude_tv.text = destination.latitude.toString()
+        destination_longitude_tv.text = destination.longitude.toString()
     }
 }
