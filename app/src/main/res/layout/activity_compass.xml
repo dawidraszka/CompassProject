@@ -39,50 +39,117 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <TextView
-        android:id="@+id/latitude_label"
+        android:id="@+id/current_latitude_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginBottom="8dp"
         android:gravity="end"
         android:text="@string/latitude"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/latitude_tv"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/current_latitude_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <TextView
-        android:id="@+id/latitude_tv"
+        android:id="@+id/current_latitude_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="8dp"
         android:text="49.1234"
-        app:layout_constraintBottom_toBottomOf="@+id/latitude_label"
+        app:layout_constraintBottom_toBottomOf="@+id/current_latitude_label"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toEndOf="@+id/latitude_label" />
+        app:layout_constraintStart_toEndOf="@+id/current_latitude_label" />
 
     <TextView
-        android:id="@+id/longitude_label"
+        android:id="@+id/current_longitude_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="4dp"
         android:text="@string/longitude"
-        app:layout_constraintBottom_toBottomOf="@+id/latitude_tv"
-        app:layout_constraintEnd_toStartOf="@+id/longitude_tv"
+        app:layout_constraintBottom_toBottomOf="@+id/current_latitude_tv"
+        app:layout_constraintEnd_toStartOf="@+id/current_longitude_tv"
         app:layout_constraintStart_toStartOf="@+id/guideline" />
 
     <TextView
-        android:id="@+id/longitude_tv"
+        android:id="@+id/current_longitude_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="8dp"
         android:text="21.6348"
-        app:layout_constraintBottom_toBottomOf="@+id/longitude_label"
+        app:layout_constraintBottom_toBottomOf="@+id/current_longitude_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/longitude_label" />
+        app:layout_constraintStart_toEndOf="@+id/current_longitude_label" />
+
+    <TextView
+        android:id="@+id/destination_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/destination"
+        app:layout_constraintBottom_toBottomOf="@+id/set_destination_button"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/set_destination_button" />
+
+    <Button
+        android:id="@+id/set_destination_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/set_destination"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/current_longitude_tv" />
+
+    <TextView
+        android:id="@+id/destination_latitude_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:gravity="end"
+        android:text="@string/latitude"
+        app:layout_constraintEnd_toStartOf="@+id/destination_latitude_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/set_destination_button" />
+
+    <TextView
+        android:id="@+id/destination_latitude_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="8dp"
+        android:text="49.1234"
+        app:layout_constraintBottom_toBottomOf="@+id/destination_latitude_label"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toEndOf="@+id/destination_latitude_label" />
+
+    <TextView
+        android:id="@+id/destination_longitude_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="4dp"
+        android:text="@string/longitude"
+        app:layout_constraintBottom_toBottomOf="@+id/destination_latitude_tv"
+        app:layout_constraintEnd_toStartOf="@+id/destination_longitude_tv"
+        app:layout_constraintStart_toStartOf="@+id/guideline" />
+
+    <TextView
+        android:id="@+id/destination_longitude_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="8dp"
+        android:text="21.6348"
+        app:layout_constraintBottom_toBottomOf="@+id/destination_longitude_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/destination_longitude_label" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
