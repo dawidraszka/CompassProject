@@ -1,4 +1,4 @@
-package pl.dawidraszka.compassproject
+package pl.dawidraszka.compassproject.view
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat

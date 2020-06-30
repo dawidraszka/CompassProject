@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CompassActivity">
+    tools:context=".view.CompassActivity">
 
     <TextView
         android:id="@+id/direction_tv"
@@ -21,11 +21,13 @@
     <ImageView
         android:id="@+id/compass_iv"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:adjustViewBounds="true"
+        app:layout_constraintBottom_toTopOf="@+id/current_latitude_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/direction_tv"
@@ -54,13 +56,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="4dp"
+        android:layout_marginBottom="8dp"
         android:gravity="end"
         android:text="@string/latitude"
+        app:layout_constraintBottom_toTopOf="@+id/destination_label"
         app:layout_constraintEnd_toStartOf="@+id/current_latitude_tv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/compass_iv" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/current_latitude_tv"
@@ -102,32 +104,21 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="@string/destination"
-        app:layout_constraintBottom_toBottomOf="@+id/set_destination_button"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/set_destination_button" />
-
-    <Button
-        android:id="@+id/set_destination_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/set_destination"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/current_longitude_tv" />
+        app:layout_constraintBottom_toTopOf="@+id/destination_latitude_label"
+        app:layout_constraintEnd_toStartOf="@+id/guideline" />
 
     <TextView
         android:id="@+id/destination_latitude_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="4dp"
+        android:layout_marginBottom="16dp"
         android:gravity="end"
         android:text="@string/latitude"
+        app:layout_constraintBottom_toTopOf="@+id/set_destination_button"
         app:layout_constraintEnd_toStartOf="@+id/destination_latitude_tv"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/set_destination_button" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/destination_latitude_tv"
@@ -162,5 +153,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/destination_longitude_label" />
+
+    <Button
+        android:id="@+id/provide_location_permission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/provide_location_permission"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/set_destination_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/set_destination"
+        app:layout_constraintBottom_toTopOf="@+id/provide_location_permission"
+        app:layout_constraintEnd_toEndOf="@+id/provide_location_permission"
+        app:layout_constraintStart_toStartOf="@+id/provide_location_permission" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
