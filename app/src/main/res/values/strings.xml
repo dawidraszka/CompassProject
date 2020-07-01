@@ -12,4 +12,5 @@
     <string name="set_destination">set destination</string>
     <string name="cancel">Cancel</string>
     <string name="current_location">Current location:</string>
+    <string name="empty">-</string>
 </resources>

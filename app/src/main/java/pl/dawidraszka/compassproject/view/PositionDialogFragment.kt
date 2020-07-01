@@ -36,7 +36,7 @@ class PositionDialogFragment : DialogFragment() {
                 .setPositiveButton(
                     R.string.ok
                 ) { dialog, _ ->
-                    listener.onDialogPositiveClick(SimplePosition(layout.latitude_et.text.toString().toFloat(), layout.longitude_et.text.toString().toFloat()))
+                    listener.onDialogPositiveClick(SimplePosition(layout.latitude_et.text.toString().toDouble(), layout.longitude_et.text.toString().toDouble()))
                 }
                 .setNegativeButton(R.string.cancel) { dialog, _ ->
                     dialog.cancel()

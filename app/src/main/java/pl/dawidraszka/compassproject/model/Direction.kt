@@ -1,8 +1,8 @@
 package pl.dawidraszka.compassproject.model
 
-data class Direction(val angle: Float) {
+data class Direction(val angle: Int) {
 
-    private val earthDirection: EarthDirection = when (angle.toInt()) {
+    private val earthDirection: EarthDirection = when (angle) {
         in 23..67 -> EarthDirection.NORTHEAST
         in 68..112 -> EarthDirection.EAST
         in 113..157 -> EarthDirection.SOUTHEAST

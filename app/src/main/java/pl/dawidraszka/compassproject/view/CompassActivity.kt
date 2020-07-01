@@ -1,45 +1,82 @@
 package pl.dawidraszka.compassproject.view
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.RotateAnimation
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_compass.*
-
 import pl.dawidraszka.compassproject.R
+import pl.dawidraszka.compassproject.di.CompassApplication
 import pl.dawidraszka.compassproject.model.Direction
 import pl.dawidraszka.compassproject.model.SimplePosition
-import pl.dawidraszka.compassproject.presenter.CompassPresenter
+import pl.dawidraszka.compassproject.viewmodel.CompassViewModel
+import javax.inject.Inject
+import kotlin.math.abs
 
 const val PERMISSION_REQUEST_LOCATION = 0
 
 class CompassActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback,
-    CompassView, PositionDialogFragment.PositionDialogListener {
+    PositionDialogFragment.PositionDialogListener {
 
-    private lateinit var presenter: CompassPresenter
+    @Inject
+    lateinit var compassViewModel: CompassViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_compass)
 
-        presenter =
-            CompassPresenter(this, getSystemService(Context.SENSOR_SERVICE) as SensorManager)
-
-        if (checkSelfPermissionCompat(Manifest.permission.ACCESS_COARSE_LOCATION) ==
+        if (checkSelfPermissionCompat(Manifest.permission.ACCESS_FINE_LOCATION) ==
             PackageManager.PERMISSION_GRANTED
         ) removeLocationPermissionButton() else {
             provide_location_permission.setOnClickListener { requestLocationPermission() }
         }
 
-        set_destination_button.setOnClickListener { PositionDialogFragment().show(supportFragmentManager, "PositionDialogFragment") }
+        set_destination_button.setOnClickListener {
+            PositionDialogFragment().show(
+                supportFragmentManager,
+                "PositionDialogFragment"
+            )
+        }
+        (application as CompassApplication).appComponent.inject(this)
+
+        compassViewModel.getDirection().observe(this, Observer {
+            updateDirection(it)
+            rotateCompassNeedle(it.angle)
+        })
+
+        compassViewModel.getPosition().observe(this, Observer {
+            updateCurrentPosition(it)
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        compassViewModel.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        compassViewModel.onPause()
+    }
+
+    private fun updateDirection(direction: Direction) {
+        direction_tv.text = direction.toString()
+    }
+
+    private fun rotateCompassNeedle(rotation: Int) {
+        ///compass_needle_iv.rotation = rotation.toFloat()
+
+        compass_needle_iv?.animation?.cancel()
+
+        if (abs(compass_needle_iv.rotation - rotation) > 180)
+            compass_needle_iv.animate().rotationBy(rotation + 360 - compass_needle_iv.rotation).setDuration(100).start()
+        else
+            compass_needle_iv.animate().rotationBy(rotation - compass_needle_iv.rotation).setDuration(100).start()
     }
 
     override fun onRequestPermissionsResult(
@@ -63,7 +100,7 @@ class CompassActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
     }
 
     private fun requestLocationPermission() {
-        if (shouldShowRequestPermissionRationaleCompat(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (shouldShowRequestPermissionRationaleCompat(Manifest.permission.ACCESS_FINE_LOCATION)) {
             Snackbar.make(
                 provide_location_permission,
                 R.string.location_permission_alert_message,
@@ -72,51 +109,48 @@ class CompassActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
                 R.string.ok
             ) {
                 requestPermissionsCompat(
-                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                     PERMISSION_REQUEST_LOCATION
                 )
             }.show()
 
         } else {
             requestPermissionsCompat(
-                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 PERMISSION_REQUEST_LOCATION
             )
         }
     }
 
-
-    override fun onResume() {
-        super.onResume()
-        presenter.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        presenter.onPause()
-    }
-
-    override fun rotateCompassNeedle(needleDegree: Float, rotation: Float) {
-        val rotateAnimation = RotateAnimation(
-            needleDegree,
-            rotation,
-            Animation.RELATIVE_TO_SELF, 0.5f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f
-        )
-
-        rotateAnimation.duration = 200
-        rotateAnimation.fillAfter = true
-
-        compass_needle_iv.startAnimation(rotateAnimation)
-    }
-
-    override fun updateDirection(direction: Direction) {
-        direction_tv.text = direction.toString()
+    private fun updateCurrentPosition(currentPosition: SimplePosition) {
+        current_latitude_tv.text = currentPosition.latitude.toString()
+        current_longitude_tv.text = currentPosition.longitude.toString()
     }
 
     override fun onDialogPositiveClick(destination: SimplePosition) {
         destination_latitude_tv.text = destination.latitude.toString()
         destination_longitude_tv.text = destination.longitude.toString()
+        compassViewModel.setDestination(destination)
+
+        compassViewModel.getDirectionBearing().observe(this, Observer {
+            if(it != null){
+                showBearingIndicator()
+                updateBearingIndicator(it)
+            }
+        })
+    }
+
+    private fun showBearingIndicator() {
+        compass_indicator_iv.visibility = View.VISIBLE
+    }
+
+
+    private fun updateBearingIndicator(angle: Float) {
+        compass_indicator_iv?.animation?.cancel()
+
+        if (abs(compass_indicator_iv.rotation - angle) > 180)
+            compass_indicator_iv.animate().rotationBy(angle + 360 - compass_indicator_iv.rotation).setDuration(100).start()
+        else
+            compass_indicator_iv.animate().rotationBy(angle - compass_indicator_iv.rotation).setDuration(100).start()
     }
 }
