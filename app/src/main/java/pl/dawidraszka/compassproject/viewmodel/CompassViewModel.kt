@@ -15,8 +15,10 @@ class CompassViewModel @Inject constructor(
     ViewModel() {
 
     fun getDirection(): LiveData<Direction> = directionRepository.currentDirection
+    fun getSensorAccuracy(): LiveData<Int> = directionRepository.sensorAccuracy
     fun getPosition(): LiveData<SimplePosition> = positionRepository.currentPosition
-    fun getDirectionBearing(): LiveData<Float> = positionRepository.destinationBearing
+    fun getDestinationBearing(): LiveData<Float> = positionRepository.destinationBearing
+    fun getDestination(): LiveData<SimplePosition> = positionRepository.destination
 
     fun onResume() {
         directionRepository.startDirectionUpdates()
@@ -29,7 +31,7 @@ class CompassViewModel @Inject constructor(
     }
 
     fun setDestination(destination: SimplePosition) {
-        positionRepository.destination = destination
+        positionRepository.setDestination(destination)
     }
 
 /*    private var needleDegree = 0f

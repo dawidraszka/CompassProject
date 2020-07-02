@@ -4,19 +4,19 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import pl.dawidraszka.compassproject.Chain
+import pl.dawidraszka.compassproject.model.data.Chain
 import pl.dawidraszka.compassproject.lowPassFilter
 import pl.dawidraszka.compassproject.model.Direction
-import pl.dawidraszka.compassproject.model.SimplePosition
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
 class DirectionRepository @Inject constructor() : SensorEventListener {
+
     val currentDirection = MutableLiveData<Direction>()
+    val sensorAccuracy = MutableLiveData<Int>()
 
     @Inject
     lateinit var sensorManager: SensorManager
@@ -50,16 +50,27 @@ class DirectionRepository @Inject constructor() : SensorEventListener {
 
     fun stopDirectionUpdates() = sensorManager.unregisterListener(this)
 
-
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        //TODO ADD ACCURACY ICON
+    override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
+        sensorAccuracy.value = accuracy
     }
 
     override fun onSensorChanged(evt: SensorEvent) {
         if (evt.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-            System.arraycopy(lowPassFilter(evt.values, accelerometerReading), 0, accelerometerReading, 0, accelerometerReading.size)
+            System.arraycopy(
+                lowPassFilter(evt.values, accelerometerReading),
+                0,
+                accelerometerReading,
+                0,
+                accelerometerReading.size
+            )
         } else if (evt.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
-            System.arraycopy(lowPassFilter(evt.values, magnetometerReading), 0, magnetometerReading, 0, magnetometerReading.size)
+            System.arraycopy(
+                lowPassFilter(evt.values, magnetometerReading),
+                0,
+                magnetometerReading,
+                0,
+                magnetometerReading.size
+            )
         }
         updateOrientationAngles()
     }
@@ -82,32 +93,11 @@ class DirectionRepository @Inject constructor() : SensorEventListener {
 
             SensorManager.getOrientation(
                 rotationMatrix,
-                orientationAngles)
+                orientationAngles
+            )
 
             chain.addElement(azimuth.toInt())
-
-            currentDirection.postValue(Direction(chain.average()))
+            currentDirection.value = Direction(chain.average())
         }
-
-
-        /*  val degree = when {
-              azimuth == 0f -> 0f
-              azimuth > 0f -> (azimuth * (180 / Math.PI)).toFloat()
-              else -> (360 + azimuth * (180 / Math.PI)).toFloat()
-          }*/
-
-
-        /*  compassView.updateDirection(Direction(degree))
-
-          if (needleDegree > degree + 180) {
-              needleDegree -= 360
-          }
-          if (degree > needleDegree + 180) {
-              needleDegree += 360
-          }
-
-          compassView.rotateCompassNeedle(needleDegree, degree)
-          needleDegree = degree*/
     }
-
 }

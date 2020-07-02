@@ -16,7 +16,7 @@ import javax.inject.Singleton
 class PositionRepository @Inject constructor() {
     val currentPosition = MutableLiveData<SimplePosition>()
     val destinationBearing = MutableLiveData<Float>()
-    var destination: SimplePosition? = null
+    val destination = MutableLiveData<SimplePosition>()
 
     @Inject
     lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -39,19 +39,28 @@ class PositionRepository @Inject constructor() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
+    fun setDestination(destination: SimplePosition) {
+        this.destination.value = destination
+        updateBearing()
+    }
+
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult?) {
             locationResult ?: return
             with(locationResult.lastLocation) {
-                currentPosition.postValue(SimplePosition(latitude, longitude))
-                destinationBearing.postValue(destination?.let { angleToSimplePosition(it) })
+                currentPosition.value = SimplePosition(latitude, longitude)
+                //currentPosition.postValue(SimplePosition(latitude, longitude))
+                updateBearing()
             }
         }
     }
-}
 
-fun Location.angleToSimplePosition(simplePosition: SimplePosition): Float =
-    this.bearingTo(Location("").apply {
-        longitude = simplePosition.longitude
-        latitude = simplePosition.latitude
-    })
+    private fun updateBearing() {
+        val currentPosition = currentPosition.value
+        val destination = destination.value
+
+        if (currentPosition != null && destination != null)
+            destinationBearing.value = currentPosition.bearingTo(destination)
+            //destinationBearing.postValue(currentPosition.bearingTo(destination))
+    }
+}

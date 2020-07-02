@@ -9,8 +9,9 @@
     <string name="location_permission_alert_title">Permission required!</string>
     <string name="location_permission_alert_message">In order to use this functionality, application needs location permissions</string>
     <string name="ok">OK</string>
-    <string name="set_destination">set destination</string>
+    <string name="set_destination">Set destination</string>
     <string name="cancel">Cancel</string>
     <string name="current_location">Current location:</string>
     <string name="empty">-</string>
+    <string name="location_permission_needed">Location permission needed to use this function</string>
 </resources>

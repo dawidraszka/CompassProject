@@ -3,4 +3,8 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <color name="sensor_high_accuracy">#96c45a</color>
+    <color name="sensor_medium_accuracy">#faac44</color>
+    <color name="sensor_low_accuracy">#ed1f24</color>
 </resources>

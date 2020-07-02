@@ -8,15 +8,28 @@
 
     <TextView
         android:id="@+id/direction_tv"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:text="280°W"
+        android:fontFamily="sans-serif-medium"
+        android:text="180 W"
+        android:textSize="@dimen/direction_text_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/gps_signal_indicator_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="8dp"
+        android:tint="@android:color/holo_green_dark"
+        android:tintMode="multiply"
+        app:layout_constraintEnd_toEndOf="@+id/compass_iv"
+        app:layout_constraintTop_toTopOf="@+id/compass_iv"
+        app:srcCompat="@drawable/ic_gps_signal_indicator" />
 
     <ImageView
         android:id="@+id/compass_iv"

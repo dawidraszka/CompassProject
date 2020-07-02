@@ -8,7 +8,7 @@ import pl.dawidraszka.compassproject.viewmodel.CompassViewModel
 import javax.inject.Singleton
 
 @Singleton
-@Component (modules = [AppModule::class])
+@Component(modules = [AppModule::class])
 interface AppComponent {
     fun directionRepository(): DirectionRepository
     fun locationRepository(): PositionRepository
