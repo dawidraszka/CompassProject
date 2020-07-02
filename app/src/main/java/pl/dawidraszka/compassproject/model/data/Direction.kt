@@ -1,4 +1,4 @@
-package pl.dawidraszka.compassproject.model
+package pl.dawidraszka.compassproject.model.data
 
 data class Direction(val angle: Int) {
 

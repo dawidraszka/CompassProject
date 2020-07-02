@@ -16,7 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import pl.dawidraszka.compassproject.R;
-import pl.dawidraszka.compassproject.model.SimplePosition;
+import pl.dawidraszka.compassproject.model.data.SimplePosition;
 
 public class PositionDialogFragment extends DialogFragment {
 

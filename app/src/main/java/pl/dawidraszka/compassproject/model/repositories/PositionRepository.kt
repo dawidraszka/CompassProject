@@ -1,14 +1,13 @@
 package pl.dawidraszka.compassproject.model.repositories
 
 import android.annotation.SuppressLint
-import android.location.Location
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import pl.dawidraszka.compassproject.model.SimplePosition
+import pl.dawidraszka.compassproject.model.data.SimplePosition
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -48,8 +47,11 @@ class PositionRepository @Inject constructor() {
         override fun onLocationResult(locationResult: LocationResult?) {
             locationResult ?: return
             with(locationResult.lastLocation) {
-                currentPosition.value = SimplePosition(latitude, longitude)
-                //currentPosition.postValue(SimplePosition(latitude, longitude))
+                currentPosition.value =
+                    SimplePosition(
+                        latitude,
+                        longitude
+                    )
                 updateBearing()
             }
         }
@@ -61,6 +63,5 @@ class PositionRepository @Inject constructor() {
 
         if (currentPosition != null && destination != null)
             destinationBearing.value = currentPosition.bearingTo(destination)
-            //destinationBearing.postValue(currentPosition.bearingTo(destination))
     }
 }

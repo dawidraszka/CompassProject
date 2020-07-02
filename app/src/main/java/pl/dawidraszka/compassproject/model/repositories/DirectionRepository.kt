@@ -5,9 +5,8 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.lifecycle.MutableLiveData
-import pl.dawidraszka.compassproject.model.data.Chain
 import pl.dawidraszka.compassproject.lowPassFilter
-import pl.dawidraszka.compassproject.model.Direction
+import pl.dawidraszka.compassproject.model.data.Direction
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,8 +25,6 @@ class DirectionRepository @Inject constructor() : SensorEventListener {
 
     private val rotationMatrix = FloatArray(9)
     private val orientationAngles = FloatArray(3)
-
-    private val chain = Chain(20)
 
     fun startDirectionUpdates() {
         sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also { accelerometer ->
@@ -96,8 +93,8 @@ class DirectionRepository @Inject constructor() : SensorEventListener {
                 orientationAngles
             )
 
-            chain.addElement(azimuth.toInt())
-            currentDirection.value = Direction(chain.average())
+            currentDirection.value =
+                Direction(azimuth.toInt())
         }
     }
 }

@@ -16,10 +16,11 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_compass.*
 import pl.dawidraszka.compassproject.R
 import pl.dawidraszka.compassproject.di.CompassApplication
-import pl.dawidraszka.compassproject.model.Direction
-import pl.dawidraszka.compassproject.model.SimplePosition
+import pl.dawidraszka.compassproject.model.data.Direction
+import pl.dawidraszka.compassproject.model.data.SimplePosition
 import pl.dawidraszka.compassproject.viewmodel.CompassViewModel
 import javax.inject.Inject
+import kotlin.math.abs
 
 const val PERMISSION_REQUEST_LOCATION = 0
 
@@ -32,6 +33,8 @@ class CompassActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_compass)
+
+        (application as CompassApplication).appComponent.inject(this)
 
         if (checkSelfPermissionCompat(Manifest.permission.ACCESS_FINE_LOCATION) ==
             PackageManager.PERMISSION_GRANTED
@@ -62,7 +65,6 @@ class CompassActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
                 }.show()
             }
         }
-        (application as CompassApplication).appComponent.inject(this)
 
         compassViewModel.getDirection().observe(this, Observer {
             updateDirection(it)
@@ -95,13 +97,19 @@ class CompassActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
         when (sensorAccuracy) {
             SensorManager.SENSOR_STATUS_ACCURACY_HIGH -> gps_signal_indicator_iv.colorFilter =
                 PorterDuffColorFilter(
-                    ContextCompat.getColor(this, R.color.sensor_high_accuracy), PorterDuff.Mode.MULTIPLY)
+                    ContextCompat.getColor(this, R.color.sensor_high_accuracy),
+                    PorterDuff.Mode.MULTIPLY
+                )
             SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM -> gps_signal_indicator_iv.colorFilter =
                 PorterDuffColorFilter(
-                    ContextCompat.getColor(this, R.color.sensor_medium_accuracy), PorterDuff.Mode.MULTIPLY)
+                    ContextCompat.getColor(this, R.color.sensor_medium_accuracy),
+                    PorterDuff.Mode.MULTIPLY
+                )
             SensorManager.SENSOR_STATUS_ACCURACY_LOW -> gps_signal_indicator_iv.colorFilter =
                 PorterDuffColorFilter(
-                    ContextCompat.getColor(this, R.color.sensor_low_accuracy), PorterDuff.Mode.MULTIPLY)
+                    ContextCompat.getColor(this, R.color.sensor_low_accuracy),
+                    PorterDuff.Mode.MULTIPLY
+                )
         }
     }
 
@@ -120,7 +128,18 @@ class CompassActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
     }
 
     private fun rotateCompassNeedle(rotation: Int) {
-        compass_needle_iv.rotation = rotation.toFloat()
+/*        if(abs(compass_needle_iv.rotation - rotation) > 180){
+            compass_needle_iv.rotation = rotation.toFloat() + 360
+        } else {
+            compass_needle_iv.rotation = rotation.toFloat()
+        }*/
+
+        compass_needle_iv?.animation?.cancel()
+
+        if (abs(compass_needle_iv.rotation - rotation) > 180)
+            compass_needle_iv.animate().rotationBy(rotation + 360 - compass_needle_iv.rotation).setDuration(100).start()
+        else
+            compass_needle_iv.animate().rotationBy(rotation - compass_needle_iv.rotation).setDuration(100).start()
     }
 
     override fun onRequestPermissionsResult(
@@ -140,6 +159,7 @@ class CompassActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissions
     }
 
     private fun removeLocationPermissionButton() {
+        compassViewModel.locationPermission = true
         provide_location_permission.visibility = View.GONE
     }
 
